@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roots & Routes | Indigenous Knowledge Learning Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --ochre: #CC7722;
+            --earth: #8B4513;
+            --sage: #87A878;
+            --clay: #D4A373;
+            --charcoal: #2C2420;
+            --cream: #F5F1E8;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cream);
+            color: var(--charcoal);
+        }
+        
+        .serif {
+            font-family: 'Crimson Pro', serif;
+        }
+        
+        .pattern-bg {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23CC7722' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .text-ochre { color: var(--ochre); }
+        .bg-ochre { background-color: var(--ochre); }
+        .bg-earth { background-color: var(--earth); }
+        .bg-sage { background-color: var(--sage); }
+        .text-sage { color: var(--sage); }
+        
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(44, 36, 32, 0.15);
+        }
+        
+        .circle-reveal {
+            clip-path: circle(0% at 50% 50%);
+            transition: clip-path 0.6s ease;
+        }
+        
+        .circle-reveal.active {
+            clip-path: circle(150% at 50% 50%);
+        }
+        
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .activity-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(245,241,232,0.9) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(204, 119, 34, 0.2);
+        }
+        
+        .indigenous-pattern {
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(204, 119, 34, 0.05) 10px,
+                rgba(204, 119, 34, 0.05) 20px
+            );
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .story-circle {
+            transition: all 0.4s ease;
+        }
+        
+        .story-circle:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body class="pattern-bg overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-cream/90 backdrop-blur-md border-b border-ochre/20 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-ochre rounded-full flex items-center justify-center">
+                        <i data-lucide="sun" class="text-white w-6 h-6"></i>
+                    </div>
+                    <span class="serif text-2xl font-semibold text-charcoal">Roots & Routes</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-charcoal hover:text-ochre transition-colors font-medium">About</a>
+                    <a href="#activities" class="text-charcoal hover:text-ochre transition-colors font-medium">Activities</a>
+                    <a href="#community" class="text-charcoal hover:text-ochre transition-colors font-medium">Community</a>
+                    <a href="#resources" class="text-charcoal hover:text-ochre transition-colors font-medium">Resources</a>
+                </div>
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-cream border-t border-ochre/20">
+            <div class="px-4 pt-2 pb-4 space-y-2">
+                <a href="#about" class="block py-2 text-charcoal hover:text-ochre">About</a>
+                <a href="#activities" class="block py-2 text-charcoal hover:text-ochre">Activities</a>
+                <a href="#community" class="block py-2 text-charcoal hover:text-ochre">Community</a>
+                <a href="#resources" class="block py-2 text-charcoal hover:text-ochre">Resources</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-br from-ochre/20 via-transparent to-sage/20"></div>
+            <div class="absolute top-20 left-10 w-64 h-64 bg-ochre/10 rounded-full blur-3xl animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-sage/10 rounded-full blur-3xl animate-float" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="fade-up">
+                <div class="inline-flex items-center space-x-2 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full border border-ochre/30 mb-8">
+                    <span class="w-2 h-2 bg-ochre rounded-full animate-pulse"></span>
+                    <span class="text-sm font-medium text-ochre uppercase tracking-wider">Indigenous Knowledge Systems</span>
+                </div>
+                <h1 class="serif text-5xl md:text-7xl lg:text-8xl font-bold text-charcoal mb-6 leading-tight">
+                    Learning from the<br>
+                    <span class="text-ochre relative inline-block">
+                        Land
+                        <svg class="absolute -bottom-2 left-0 w-full h-3 text-ochre/30" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99997C25.7509 2.74999 83.6503 -3.09998 198.002 6.99997" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                    </span>
+                </h1>
+                <p class="text-xl md:text-2xl text-charcoal/70 max-w-3xl mx-auto mb-12 font-light leading-relaxed">
+                    Facilitating group activities that bridge indigenous concepts with modern learning communities. Discover the wisdom embedded in place, story, and relationship.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="scrollToSection('activities')" class="group bg-ochre text-white px-8 py-4 rounded-full font-medium text-lg hover:bg-earth transition-all flex items-center justify-center space-x-2 hover:shadow-lg hover:shadow-ochre/30">
+                        <span>Explore Activities</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                    <button onclick="scrollToSection('about')" class="px-8 py-4 rounded-full font-medium text-lg border-2 border-charcoal/30 text-charcoal hover:border-ochre hover:text-ochre transition-all">
+                        Our Philosophy
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-ochre/50"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="fade-up">
+                    <h2 class="serif text-4xl md:text-5xl font-bold text-charcoal mb-6">The Circle of Learning</h2>
+                    <p class="text-lg text-charcoal/70 mb-6 leading-relaxed">
+                        Indigenous knowledge systems emphasize relational learning—where the learner is not separate from the learned. Our platform facilitates preliminary group activities that honor these traditions while creating space for contemporary dialogue.
+                    </p>
+                    <p class="text-lg text-charcoal/70 mb-8 leading-relaxed">
+                        Through structured group work, participants explore concepts like <span class="text-ochre font-semibold">reciprocity</span>, <span class="text-ochre font-semibold">interconnectedness</span>, and <span class="text-ochre font-semibold">place-based knowing</span>, presenting their insights back to the learning community.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="border-l-4 border-ochre pl-4">
+                            <h4 class="font-semibold text-charcoal mb-1">Relational</h4>
+                            <p class="text-sm text-charcoal/60">Learning through connection to community and environment</p>
+                        </div>
+                        <div class="border-l-4 border-sage pl-4">
+                            <h4 class="font-semibold text-charcoal mb-1">Experiential</h4>
+                            <p class="text-sm text-charcoal/60">Knowledge gained through direct experience and practice</p>
+                        </div>
+                        <div class="border-l-4 border-earth pl-4">
+                            <h4 class="font-semibold text-charcoal mb-1">Holistic</h4>
+                            <p class="text-sm text-charcoal/60">Integrating spiritual, emotional, and intellectual dimensions</p>
+                        </div>
+                        <div class="border-l-4 border-clay pl-4">
+                            <h4 class="font-semibold text-charcoal mb-1">Intergenerational</h4>
+                            <p class="text-sm text-charcoal/60">Wisdom passed between elders and youth</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative fade-up">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <div class="aspect-square bg-gradient-to-br from-ochre/20 to-sage/20 indigenous-pattern flex items-center justify-center">
+                            <div class="text-center p-12">
+                                <div class="w-32 h-32 mx-auto mb-6 relative">
+                                    <div class="absolute inset-0 border-4 border-ochre/30 rounded-full animate-spin" style="animation-duration: 20s;"></div>
+                                    <div class="absolute inset-4 border-4 border-sage/40 rounded-full animate-spin" style="animation-duration: 15s; animation-direction: reverse;"></div>
+                                    <div class="absolute inset-8 bg-ochre/10 rounded-full flex items-center justify-center">
+                                        <i data-lucide="users" class="w-12 h-12 text-ochre"></i>
+                                    </div>
+                                </div>
+                                <p class="serif text-2xl text-charcoal italic">"Knowledge is a gift that grows when shared"</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 w-48 h-48 bg-sage/20 rounded-full blur-2xl -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Activity Hub -->
+    <section id="activities" class="py-24 bg-charcoal text-cream relative overflow-hidden">
+        <div class="absolute inset-0 indigenous-pattern opacity-10"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 fade-up">
+                <span class="text-ochre font-medium uppercase tracking-widest text-sm">Facilitation Tools</span>
+                <h2 class="serif text-4xl md:text-5xl font-bold mt-4 mb-6">Group Activity Framework</h2>
+                <p class="text-xl text-cream/70 max-w-3xl mx-auto">
+                    Structured activities designed to surface indigenous concepts through collaborative exploration and community presentation.
+                </p>
+            </div>
+
+            <!-- Activity Cards Grid -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <!-- Activity 1 -->
+                <div class="activity-card rounded-2xl p-8 hover-lift cursor-pointer group fade-up" onclick="openActivity('mapping')">
+                    <div class="w-14 h-14 bg-ochre/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-ochre/20 transition-colors">
+                        <i data-lucide="map" class="w-7 h-7 text-ochre"></i>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-charcoal mb-3">Mapping Belonging</h3>
+                    <p class="text-charcoal/70 mb-4">Participants create visual maps of their relationship to place, identifying indigenous concepts of land stewardship and connection.</p>
+                    <div class="flex items-center text-ochre font-medium text-sm">
+                        <span>View Activity Guide</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Activity 2 -->
+                <div class="activity-card rounded-2xl p-8 hover-lift cursor-pointer group fade-up" onclick="openActivity('story')">
+                    <div class="w-14 h-14 bg-sage/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-sage/20 transition-colors">
+                        <i data-lucide="book-open" class="w-7 h-7 text-sage"></i>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-charcoal mb-3">Story Circles</h3>
+                    <p class="text-charcoal/70 mb-4">Traditional circle protocol for sharing stories that contain indigenous knowledge, with rotating leadership and deep listening practices.</p>
+                    <div class="flex items-center text-sage font-medium text-sm">
+                        <span>View Activity Guide</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Activity 3 -->
+                <div class="activity-card rounded-2xl p-8 hover-lift cursor-pointer group fade-up" onclick="openActivity('reciprocity')">
+                    <div class="w-14 h-14 bg-earth/10 rounded-xl flex items-center justify-center mb-6 group-hover:bg-earth/20 transition-colors">
+                        <i data-lucide="gift" class="w-7 h-7 text-earth"></i>
+                    </div>
+                    <h3 class="serif text-2xl font-bold text-charcoal mb-3">Reciprocity Web</h3>
+                    <p class="text-charcoal/70 mb-4">Exploring the principle of reciprocity through group exchanges, identifying give-and-take relationships in nature and community.</p>
+                    <div class="flex items-center text-earth font-medium text-sm">
+                        <span>View Activity Guide</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Activity Modal (Hidden by default) -->
+            <div id="activityModal" class="fixed inset-0 z-50 hidden">
+                <div class="absolute inset-0 bg-charcoal/90 backdrop-blur-sm" onclick="closeActivity()"></div>
+                <div class="relative z-10 min-h-screen flex items-center justify-center p-4">
+                    <div class="bg-cream rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl transform transition-all" id="modalContent">
+                        <div class="sticky top-0 bg-cream border-b border-ochre/20 p-6 flex justify-between items-center">
+                            <h3 id="modalTitle" class="serif text-3xl font-bold text-charcoal"></h3>
+                            <button onclick="closeActivity()" class="w-10 h-10 rounded-full bg-charcoal/5 hover:bg-charcoal/10 flex items-center justify-center transition-colors">
+                                <i data-lucide="x" class="w-6 h-6 text-charcoal"></i>
+                            </button>
+                        </div>
+                        <div class="p-8" id="modalBody">
+                            <!-- Dynamic content inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Presentation Section -->
+    <section id="community" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-up">
+                <h2 class="serif text-4xl md:text-5xl font-bold text-charcoal mb-6">Community Outputs</h2>
+                <p class="text-xl text-charcoal/70 max-w-3xl mx-auto">
+                    Celebrating the presentations and artifacts created by learning groups as they engage with indigenous concepts.
+                </p>
+            </div>
+
+            <!-- Interactive Gallery -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Output Card 1 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover-lift cursor-pointer fade-up" onclick="showOutputDetail(1)">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-ochre/20 to-orange-100 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-24 h-24 border-4 border-ochre/30 rounded-full flex items-center justify-center">
+                                <i data-lucide="mountain" class="w-10 h-10 text-ochre"></i>
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <span class="bg-white/90 px-4 py-2 rounded-full text-sm font-medium text-charcoal">View Presentation</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span class="px-3 py-1 bg-ochre/10 text-ochre text-xs font-semibold rounded-full">Place-Based</span>
+                            <span class="text-xs text-charcoal/50">Group A</span>
+                        </div>
+                        <h3 class="serif text-xl font-bold text-charcoal mb-2">Watershed Memories</h3>
+                        <p class="text-charcoal/60 text-sm">An exploration of local water systems through indigenous stewardship concepts, presented as a digital story map.</p>
+                    </div>
+                </div>
+
+                <!-- Output Card 2 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover-lift cursor-pointer fade-up" onclick="showOutputDetail(2)">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-sage/20 to-green-100 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="grid grid-cols-2 gap-2">
+                                <div class="w-12 h-12 bg-sage/30 rounded-lg"></div>
+                                <div class="w-12 h-12 bg-sage/50 rounded-lg"></div>
+                                <div class="w-12 h-12 bg-sage/50 rounded-lg"></div>
+                                <div class="w-12 h-12 bg-sage/30 rounded-lg"></div>
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <span class="bg-white/90 px-4 py-2 rounded-full text-sm font-medium text-charcoal">View Presentation</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span class="px-3 py-1 bg-sage/10 text-sage text-xs font-semibold rounded-full">Interconnected</span>
+                            <span class="text-xs text-charcoal/50">Group B</span>
+                        </div>
+                        <h3 class="serif text-xl font-bold text-charcoal mb-2">The Web of Relations</h3>
+                        <p class="text-charcoal/60 text-sm">A visual network mapping the relationships between plants, animals, and humans in the local ecosystem.</p>
+                    </div>
+                </div>
+
+                <!-- Output Card 3 -->
+                <div class="group relative overflow-hidden rounded-2xl bg-white shadow-lg hover-lift cursor-pointer fade-up" onclick="showOutputDetail(3)">
+                    <div class="aspect-[4/3] bg-gradient-to-br from-earth/20 to-amber-100 relative overflow-hidden">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="flex space-x-[-10px]">
+                                <div class="w-16 h-16 bg-earth/40 rounded-full border-4 border-white flex items-center justify-center text-white font-bold">E</div>
+                                <div class="w-16 h-16 bg-earth/60 rounded-full border-4 border-white flex items-center justify-center text-white font-bold">L</div>
+                                <div class="w-16 h-16 bg-earth/80 rounded-full border-4 border-white flex items-center justify-center text-white font-bold">D</div>
+                            </div>
+                        </div>
+                        <div class="absolute inset-0 bg-charcoal/0 group-hover:bg-charcoal/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <span class="bg-white/90 px-4 py-2 rounded-full text-sm font-medium text-charcoal">View Presentation</span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center space-x-2 mb-3">
+                            <span class="px-3 py-1 bg-earth/10 text-earth text-xs font-semibold rounded-full">Intergenerational</span>
+                            <span class="text-xs text-charcoal/50">Group C</span>
+                        </div>
+                        <h3 class="serif text-xl font-bold text-charcoal mb-2">Elder Wisdom Project</h3>
+                        <p class="text-charcoal/60 text-sm">Recorded interviews with community elders sharing traditional ecological knowledge and seasonal practices.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="mt-16 text-center fade-up">
+                <div class="inline-block p-8 rounded-3xl bg-gradient-to-r from-ochre/10 to-sage/10 border border-ochre/20">
+                    <h3 class="serif text-2xl font-bold text-charcoal mb-4">Have a group output to share?</h3>
+                    <p class="text-charcoal/70 mb-6">Contribute your community's learning to our growing archive of indigenous knowledge explorations.</p>
+                    <button class="bg-charcoal text-white px-8 py-3 rounded-full font-medium hover:bg-ochre transition-colors">
+                        Submit Presentation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resources Section -->
+    <section id="resources" class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-16 items-start">
+                <div class="fade-up">
+                    <h2 class="serif text-4xl font-bold text-charcoal mb-6">Facilitation Resources</h2>
+                    <p class="text-lg text-charcoal/70 mb-8">
+                        Tools and protocols for educators and community leaders facilitating indigenous knowledge activities.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-cream transition-colors cursor-pointer group">
+                            <div class="w-12 h-12 bg-ochre/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-ochre/20">
+                                <i data-lucide="file-text" class="w-6 h-6 text-ochre"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-charcoal mb-1">Protocol Guidelines</h4>
+                                <p class="text-sm text-charcoal/60">Respectful engagement frameworks for working with indigenous knowledge keepers.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-cream transition-colors cursor-pointer group">
+                            <div class="w-12 h-12 bg-sage/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-sage/20">
+                                <i data-lucide="video" class="w-6 h-6 text-sage"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-charcoal mb-1">Video Tutorials</h4>
+                                <p class="text-sm text-charcoal/60">Step-by-step guides for setting up group activities and circle protocols.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 p-4 rounded-xl hover:bg-cream transition-colors cursor-pointer group">
+                            <div class="w-12 h-12 bg-earth/10 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:bg-earth/20">
+                                <i data-lucide="download" class="w-6 h-6 text-earth"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-charcoal mb-1">Printable Materials</h4>
+                                <p class="text-sm text-charcoal/60">Discussion cards, activity templates, and reflection guides for group work.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fade-up">
+                    <div class="bg-charcoal rounded-3xl p-8 text-cream relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-64 h-64 bg-ochre/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                        <h3 class="serif text-2xl font-bold mb-4 relative z-10">Newsletter</h3>
+                        <p class="text-cream/70 mb-6 relative z-10">Receive monthly facilitation tips, new activity ideas, and community highlights.</p>
+                        <form class="space-y-4 relative z-10" onsubmit="handleSubscribe(event)">
+                            <div>
+                                <input type="email" placeholder="Enter your email" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-cream placeholder-cream/50 focus:outline-none focus:border-ochre transition-colors" required>
+                            </div>
+                            <button type="submit" class="w-full bg-ochre text-white py-3 rounded-xl font-medium hover:bg-earth transition-colors flex items-center justify-center space-x-2">
+                                <span>Subscribe</span>
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </form>
+                        <p class="text-xs text-cream/50 mt-4 relative z-10">We respect your privacy. Unsubscribe at any time.</p>
+                    </div>
+
+                    <div class="mt-8 grid grid-cols-2 gap-4">
+                        <div class="bg-cream rounded-2xl p-6 text-center border border-ochre/20">
+                            <div class="text-3xl font-bold text-ochre mb-1">150+</div>
+                            <div class="text-sm text-charcoal/60">Groups Facilitated</div>
+                        </div>
+                        <div class="bg-cream rounded-2xl p-6 text-center border border-sage/20">
+                            <div class="text-3xl font-bold text-sage mb-1">12</div>
+                            <div class="text-sm text-charcoal/60">Indigenous Concepts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-charcoal text-cream py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-2">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-ochre rounded-full flex items-center justify-center">
+                            <i data-lucide="sun" class="text-white w-6 h-6"></i>
+                        </div>
+                        <span class="serif text-2xl font-semibold">Roots & Routes</span>
+                    </div>
+                    <p class="text-cream/60 max-w-md leading-relaxed">
+                        Bridging indigenous wisdom with contemporary learning communities through respectful facilitation and collaborative exploration.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-ochre">Platform</h4>
+                    <ul class="space-y-2 text-cream/60">
+                        <li><a href="#" class="hover:text-white transition-colors">Activities</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Resources</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Community</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Facilitators</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4 text-ochre">Connect</h4>
+                    <ul class="space-y-2 text-cream/60">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-cream/40 text-sm">&copy; 2026 Roots & Routes. All rights reserved.</p>
+                <div class="flex space-x-6 mt-4 md:mt-0">
+                    <a href="#" class="text-cream/40 hover:text-ochre transition-colors">
+                        <i data-lucide="twitter" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-cream/40 hover:text-ochre transition-colors">
+                        <i data-lucide="instagram" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="text-cream/40 hover:text-ochre transition-colors">
+                        <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Smooth scroll
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Activity Modal Content
+        const activityData = {
+            mapping: {
+                title: "Mapping Belonging",
+                content: `
+                    <div class="space-y-6">
+                        <div class="bg-ochre/10 rounded-2xl p-6 border-l-4 border-ochre">
+                            <h4 class="font-bold text-charcoal mb-2">Learning Objective</h4>
+                            <p class="text-charcoal/70">Participants will identify and map their personal connections to place, exploring indigenous concepts of land stewardship, territory, and belonging.</p>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-charcoal mb-3 flex items-center">
+                                    <i data-lucide="clock" class="w-5 h-5 mr-2 text-ochre"></i>
+                                    Duration
+                                </h4>
+                                <p class="text-charcoal/70">90 minutes (including presentation)</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-charcoal mb-3 flex items-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-2 text-ochre"></i>
+                                    Group Size
+                                </h4>
+                                <p class="text-charcoal/70">4-6 participants per group</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-charcoal mb-4">Activity Steps</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-ochre text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">1</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Introduction (15 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Facilitator introduces the concept of "place-based knowing" and indigenous mapping traditions that include spiritual and historical dimensions beyond Western cartography.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-ochre text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">2</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Personal Mapping (30 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Participants create individual maps of a meaningful place using symbols, colors, and textures. Encourage inclusion of sensory memories, emotional connections, and historical significance.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-ochre text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">3</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Group Synthesis (30 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Groups combine individual maps into a collective "Community of Place" map, identifying common themes, shared watersheds, and overlapping territories of meaning.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-ochre text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">4</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Presentation (15 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Each group presents their collective map to the wider learning community, explaining the indigenous concepts that emerged (reciprocity with land, ancestral connection, stewardship ethics).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-sage/10 rounded-2xl p-6">
+                            <h4 class="font-bold text-charcoal mb-2 flex items-center">
+                                <i data-lucide="lightbulb" class="w-5 h-5 mr-2 text-sage"></i>
+                                Indigenous Concepts Explored
+                            </h4>
+                            <ul class="list-disc list-inside text-charcoal/70 space-y-1 mt-2">
+                                <li>Land as relative, not resource</li>
+                                <li>Watershed consciousness</li>
+                                <li>Ancestral territory and memory</li>
+                                <li>Seasonal rounds and traditional ecological knowledge</li>
+                            </ul>
+                        </div>
+                    </div>
+                `
+            },
+            story: {
+                title: "Story Circles",
+                content: `
+                    <div class="space-y-6">
+                        <div class="bg-sage/10 rounded-2xl p-6 border-l-4 border-sage">
+                            <h4 class="font-bold text-charcoal mb-2">Learning Objective</h4>
+                            <p class="text-charcoal/70">Experience traditional oral transmission of knowledge through structured listening and sharing protocols that honor the story as teacher.</p>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-charcoal mb-3 flex items-center">
+                                    <i data-lucide="clock" class="w-5 h-5 mr-2 text-sage"></i>
+                                    Duration
+                                </h4>
+                                <p class="text-charcoal/70">60-120 minutes depending on group size</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-charcoal mb-3 flex items-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-2 text-sage"></i>
+                                    Group Size
+                                </h4>
+                                <p class="text-charcoal/70">8-12 participants per circle (optimal)</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-charcoal mb-4">Protocol</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-sage text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">1</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Setting the Circle</h5>
+                                        <p class="text-charcoal/60 text-sm">Arrange chairs in a circle with no table in the center. Place a meaningful object (talking piece) in the middle. Open with acknowledgment of the land and traditional custodians.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-sage text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">2</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">The Talking Piece</h5>
+                                        <p class="text-charcoal/60 text-sm">Only the person holding the talking piece speaks. All others practice deep listening—listening not to respond, but to understand and witness.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-sage text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">3</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Prompt</h5>
+                                        <p class="text-charcoal/60 text-sm">"Share a story about a time when the land taught you something." or "Tell us about a place that holds your family's history."</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-sage text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">4</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Reflection</h5>
+                                        <p class="text-charcoal/60 text-sm">After the circle, groups identify common themes and present 3 key learnings about indigenous knowledge transmission to the wider community.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            reciprocity: {
+                title: "Reciprocity Web",
+                content: `
+                    <div class="space-y-6">
+                        <div class="bg-earth/10 rounded-2xl p-6 border-l-4 border-earth">
+                            <h4 class="font-bold text-charcoal mb-2">Learning Objective</h4>
+                            <p class="text-charcoal/70">Understand the indigenous principle of reciprocity through experiential group activity, moving beyond transactional thinking to relational exchange.</p>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="font-bold text-charcoal mb-3 flex items-center">
+                                    <i data-lucide="clock" class="w-5 h-5 mr-2 text-earth"></i>
+                                    Duration
+                                </h4>
+                                <p class="text-charcoal/70">75 minutes</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-charcoal mb-3 flex items-center">
+                                    <i data-lucide="users" class="w-5 h-5 mr-2 text-earth"></i>
+                                    Group Size
+                                </h4>
+                                <p class="text-charcoal/70">6-10 participants</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-charcoal mb-4">Activity Flow</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-earth text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">1</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">The Gift Exchange (20 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Each participant brings a small, meaningful object. They offer it to someone in the group with an explanation of its significance. The receiver must accept and later pass it on with added meaning.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-earth text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">2</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Web Building (25 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Using yarn, participants physically create a web by connecting gifts and givers. Each connection represents a relationship of obligation, gratitude, and ongoing responsibility.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-earth text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">3</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Reflection (15 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Discuss: How does this differ from buying/selling? What are the obligations created by receiving? How does this mirror ecological relationships?</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="w-8 h-8 bg-earth text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">4</div>
+                                    <div>
+                                        <h5 class="font-semibold text-charcoal">Community Presentation (15 min)</h5>
+                                        <p class="text-charcoal/60 text-sm">Groups present their webs and explain the concept of "all my relations" and how reciprocity functions in indigenous stewardship of resources.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }
+        };
+
+        function openActivity(type) {
+            const modal = document.getElementById('activityModal');
+            const title = document.getElementById('modalTitle');
+            const body = document.getElementById('modalBody');
+            
+            title.textContent = activityData[type].title;
+            body.innerHTML = activityData[type].content;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Re-initialize icons in modal
+            setTimeout(() => lucide.createIcons(), 100);
+        }
+
+        function closeActivity() {
+            const modal = document.getElementById('activityModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function showOutputDetail(id) {
+            // Simulate showing output details
+            alert(`Opening presentation details for Group Output ${id}...\n\nIn a full implementation, this would open a detailed view of the group's presentation materials, video recordings, and reflection artifacts.`);
+        }
+
+        function handleSubscribe(e) {
+            e.preventDefault();
+            const email = e.target.querySelector('input[type="email"]').value;
+            alert(`Thank you for subscribing with ${email}!\n\nYou'll receive our monthly facilitation newsletter with new indigenous knowledge activities and community highlights.`);
+            e.target.reset();
+        }
+
+        // Close modal on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeActivity();
+            }
+        });
+    </script>
+</body>
+</html>
